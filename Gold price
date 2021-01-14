@@ -1,0 +1,75 @@
+// Set widget start
+
+let goldPrice = new ListWidget()
+goldPrice.backgroundColor = new Color("#4a525a")
+
+// Scrape website data
+// Gold Price
+let wv = new WebView();
+await wv.loadURL('https://www.abcbullion.com.au/price/feeds');
+let html = await wv.getHTML();
+log(html);
+
+const searchTerm = 'title="GOLD"><span class="value">';
+const regEx = new RegExp(`(${searchTerm})(.){7}`, 'gm');
+const string = html;
+const result = string.match(regEx);
+console.log(result[0]); // will log AUD price
+const tyler = result[0].charAt(33)+result[0].charAt(34)+result[0].charAt(35)+result[0].charAt(36)+result[0].charAt(37)+result[0].charAt(38)+result[0].charAt(39);
+
+goldPrice.addText("G: $" + tyler).textColor = new Color("FFD700")
+
+// Silver Price
+
+const searchTermS = 'title="SILVER"><span class="value">';
+const regExS = new RegExp(`(${searchTermS})(.){7}`, 'gm');
+const stringS = html;
+const resultS = string.match(regExS);
+console.log(resultS[0]); // will log AUD price
+const tylerS =resultS[0].charAt(35)+resultS[0].charAt(36)+resultS[0].charAt(37)+resultS[0].charAt(38)+resultS[0].charAt(39);
+
+goldPrice.addText("S: $" + tylerS).textColor = new Color("#C0C0C0")
+
+// Platinum Price
+
+const searchTermP = 'title="PLATINUM"><span class="value">';
+const regExP = new RegExp(`(${searchTermP})(.){7}`, 'gm');
+const stringP = html;
+const resultP = string.match(regExP);
+console.log(resultP[0]); // will log AUD price
+const tylerP = resultP[0].charAt(37)+resultP[0].charAt(38)+resultP[0].charAt(39)+resultP[0].charAt(40)+resultP[0].charAt(41)+resultP[0].charAt(42)+resultP[0].charAt(43);
+
+goldPrice.addText("Pl: $" + tylerP).textColor = new Color("#e5e4e2")
+
+// Palladium Price
+
+const searchTermPA = 'title="PALLADIUM"><span class="value">';
+const regExPA = new RegExp(`(${searchTermPA})(.){7}`, 'gm');
+const stringPA = html;
+const resultPA = string.match(regExPA);
+console.log(resultPA[0]); // will log AUD price
+const tylerPA = resultPA[0].charAt(38)+resultPA[0].charAt(39)+resultPA[0].charAt(40)+resultPA[0].charAt(41)+resultPA[0].charAt(42)+resultPA[0].charAt(43)+resultPA[0].charAt(44);
+
+goldPrice.addText("Pa: $" + tylerPA).textColor = new Color("#e5e4e2")
+
+// update time
+
+ let currentTime = new Date()
+ let df = new DateFormatter()
+  df.useShortDateStyle()
+  df.useShortTimeStyle()
+ let dateTxt = df.string(currentTime)
+
+goldPrice.addSpacer()
+    let mykiUpdateTime = goldPrice.addStack()
+    let updateTxt =mykiUpdateTime.addText("Updated ")
+        updateTxt.font = Font.boldSystemFont(12)
+        updateTxt.textColor = new Color("#eeeeee") 
+
+    let updateTime = mykiUpdateTime.addText(dateTxt)
+        updateTime.font = Font.boldSystemFont(12)
+        updateTime.textColor = new Color("#eeeeee") 
+
+Script.setWidget(goldPrice)
+goldPrice.presentSmall()
+Script.complete()                
